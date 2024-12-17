@@ -1,0 +1,42 @@
+/* Restablece los márgenes y alturas de html y body */
+html, body {
+    margin: 0;
+    padding: 0;
+    height: 100%;
+  }  
+  
+  /* Login-Backtoback ocupa toda la pantalla */
+  .Login-Backtoback {
+    height: 100vh; /* Altura completa del viewport */
+    width: 100%; /* Ancho completo */
+    background-color: #f5f5f5; /* Fondo del contenedor principal */
+    display: flex; /* Flexbox para centrar contenido */
+    align-items: center; /* Centrar verticalmente */
+    justify-content: center; /* Centrar horizontalmente */
+    padding: 16px; /* Espaciado interno para evitar que toque bordes en móviles */
+    box-sizing: border-box; /* Incluye padding en el tamaño total */
+  }
+  
+  /* Login-Background es el contenedor centrado */
+  .Login-Background {
+    max-width: 400px; /* Ancho máximo para dispositivos grandes */
+    width: 100%; /* Ajuste dinámico para dispositivos pequeños */
+    background-color: #6f8aab; /* Color de fondo */
+    box-shadow: 0 32px 64px rgba(0, 0, 0, 0.2); /* Sombra */
+    border-radius: 8px; /* Bordes redondeados */
+    overflow: hidden; /* Ocultar contenido desbordado */
+    /*padding: 16px; /* Espaciado interno */
+    box-sizing: border-box; /* Incluye padding en el tamaño total */
+  }
+  
+  /* Texto del login */
+  .Login-Text {
+    color: aliceblue; /* Color del texto */
+  }
+  
+  /* Encabezado del login */
+  .Login-Header {
+    background-color: #4a6f97;
+    text-align: center; /* Centra el texto */
+  }
+  
