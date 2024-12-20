@@ -1,9 +1,14 @@
-import React, { useState } from 'react'
+import React, { useState, useContext } from 'react'
 import axios from 'axios';
+import { useNavigate } from 'react-router-dom';
+import { AuthContext  } from '../AuthContext';
 
 export default function Login() {
   const [user, setUsername] = useState('');
   const [pass, setPassword] = useState('');
+  const { login } = useContext(AuthContext);
+
+  const navigate = useNavigate();
 
   const handleSubmit = async (event) => {
     event.preventDefault();
@@ -12,9 +17,17 @@ export default function Login() {
         user,
         pass,
       });
-      console.log(response.data);
+      const token = response.data.token;
+      console.log(token);
+      if (token) {
+        login(token);
+        navigate('/topics');
+      } else {
+        alert('Usuario o contraseña incorrectos');
+      }
     } catch (error) {
       console.error(error);
+      alert('Hubo un error al intentar iniciar sesión');
     }
   };
   return (
