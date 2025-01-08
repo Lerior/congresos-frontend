@@ -4,12 +4,11 @@ import axios from 'axios';
 export default function Topics() {
   const [topics, setTopics] = useState([]);
   const token = localStorage.getItem("authToken");
-  console.log(token);
 
   useEffect(() => {
     const loadTopics = async () => {
       try {
-        const response = await axios.get('http://localhost:8000/topic', {
+        const response = await axios.get('http://localhost:8000/api/topic', {
           //mandar token en authorization
           headers: {
             'Authorization': 'Bearer ' + token
@@ -44,10 +43,10 @@ export default function Topics() {
 
     <div>
       <div className='p-3'>
-        <div className="row md-auto">
+        <div className=" bg-danger row md-auto">
             {topics.map((topic) => (
-          <div className="col p-2" key={topic.id}>
-              <div className="card" >
+          <div className=" containerCard   col p-2  bg-success" key={topic.id}>
+              <div className="itemCard card" >
                 <div className="card-header">
                   <h3>{topic.id} {topic.topic_title}</h3>
                 </div>

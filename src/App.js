@@ -1,5 +1,7 @@
 import './styles/App.css';
 import './styles/Login.css';
+import './styles/Topics.css';
+import './styles/Perfil.css'
 import { BrowserRouter as Router, Routes, Route, useLocation, Navigate } from 'react-router-dom';
 import Login from './pages/Login';
 import Topics from './pages/Topics';

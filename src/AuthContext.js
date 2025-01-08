@@ -14,9 +14,10 @@ export const AuthProvider = ({ children }) => {
   }, []);
 
   // Manejar el login
-  const login = (token) => {
+  const login = (token, lock) => {
     localStorage.setItem("authToken", token);
     setAuthToken(token);
+
   };
 
   // Manejar el logout

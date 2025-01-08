@@ -21,7 +21,7 @@ export default function Navigate() {
         <div className="collapse navbar-collapse" id="navbarText">
           <ul className="navbar-nav me-auto mb-2 mb-lg-0">
             <li className="nav-item">
-              <Link className="nav-link" aria-current="page" to="/topics">Temas</Link>
+              <Link className="nav-link" aria-current="page" to="/topics">Mis Temas</Link>
             </li>
             <li className="nav-item">
               <Link className="nav-link" to="/profile">Perfil</Link>
@@ -31,7 +31,7 @@ export default function Navigate() {
             </li>
           </ul>
           <span className="navbar-text">
-            <button className='btn btn-dark' onClick={Logout}><i className="bi bi-box-arrow-left"></i> Cerrar sesion </button>
+            <button className='btn btn-light' onClick={Logout}><i className="bi bi-box-arrow-left"></i> Cerrar sesion </button>
           </span>
         </div>
       </div>

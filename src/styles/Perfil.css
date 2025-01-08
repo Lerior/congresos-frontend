@@ -1,0 +1,19 @@
+.containerProfile{
+    display: flex;
+    flex-wrap: wrap;
+}
+
+.itemProfile{
+    flex-grow: 1;
+    flex-basis: 200;
+    /*max-width: 400px; /* Ancho máximo para dispositivos grandes */
+    /*width: 100%; /* Ajuste dinámico para dispositivos pequeños */
+    box-shadow: 0 32px 64px rgba(0, 0, 0, 0.2); 
+}
+
+.button{
+    flex-grow: 1;
+    flex-basis: 200;
+    box-shadow: 0 32px 64px rgba(0, 0, 0, 0.2); 
+    /*margin: 0 auto;*/
+}
