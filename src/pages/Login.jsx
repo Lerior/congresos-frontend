@@ -1,7 +1,7 @@
 import React, { useState, useContext } from 'react'
 import axios from 'axios';
 import { useNavigate } from 'react-router-dom';
-import { AuthContext  } from '../AuthContext';
+import { AuthContext  } from '../context/AuthContext';
 
 export default function Login() {
   const [user, setUsername] = useState('');
@@ -18,9 +18,10 @@ export default function Login() {
         pass,
       });
       const token = response.data.token;
-      console.log(token);
+      const id = response.data.user;
+      console.log(token + " User:" + id);
       if (token) {
-        login(token);
+        login(token, id);
         navigate('/topics');
       } else {
         alert('Usuario o contraseña incorrectos');

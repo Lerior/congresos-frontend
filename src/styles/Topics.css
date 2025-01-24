@@ -1,12 +1,39 @@
 .containerCard{
     display: flex;
     flex-wrap: wrap;
+    justify-content: center;
 }
 
 .itemCard{
     flex-grow: 1;
     flex-basis: 200;
     max-width: 400px; /* Ancho máximo para dispositivos grandes */
-    width: 100%; /* Ajuste dinámico para dispositivos pequeños */
+    width: 18rem; /* Ajuste dinámico para dispositivos pequeños */
     box-shadow: 0 32px 64px rgba(0, 0, 0, 0.2); 
+    position: relative;
+    transition: transform 0.5s ease;
+}
+
+.itemCard:hover {
+    transform: translateY(-10px);
+  }
+
+.card-text {
+    text-overflow: ellipsis;
+    white-space: wrap;
+    overflow: hidden;
+    text-align: center;
+}
+
+.bg-header-card{
+    background-color: rgb(40, 40, 40);
+    color: white;
+}
+
+.bg-body-card{
+    background-color: rgb(255, 255, 255);
+}
+
+.bg-footer-card{
+    background-color: rgb(180, 180, 180);
 }

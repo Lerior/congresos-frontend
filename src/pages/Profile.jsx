@@ -1,87 +1,54 @@
-import React, { useContext, useState, useEffect, useCallback } from 'react';
-import axios from 'axios';
-import { AuthContext } from '../AuthContext';
+import React, { useContext, useState, useEffect } from 'react';
+import { AuthContext } from '../context/AuthContext';
+import { deleteCongress, fetchCongresses, fetchUserById } from '../api/api';
 
 export default function Profile() {
+  const { authToken, currentUser } = useContext(AuthContext);
   const [congresos, setCongresos] = useState([]);
-  const { authToken } = useContext(AuthContext);
-  const [formData, setFormData] = useState({
-    congresoName: '',
-    congresoDescription: '',
-    congresoDate: '',
-  });
+  const [datos, setUser] = useState([]);
 
-  const handleInputChange = (e) => {
-    setFormData({
-      ...formData,
-      [e.target.id]: e.target.value,
-    });
-  };
-
-  
-  const loadCongresos = useCallback (async () => {
-    try {
-      const response = await axios.get('http://localhost:8000/api/congreso', {
-        headers: {
-          'Authorization': 'Bearer ' + authToken,
-        },
-      });
-      console.log(response.data);
-      setCongresos(response.data);
-    } catch (error) {
-      console.error('Error fetching data:', error);
-    }
-  }, [authToken]);
 
   useEffect(() => {
-    loadCongresos();
-  }, [authToken, loadCongresos]);
+    fetchUserById(currentUser, authToken)
+      .then((response) => {
+        setUser(response.data);
+      })
+      .catch((error) => console.error(error));
 
+    fetchCongresses(authToken)
+      .then((response) => {
+        setCongresos(response.data);
+      })
+      .catch((error) => console.error(error));
+  }, [currentUser, authToken]);
 
-
-  const postCongreso = async () => {
-    
+  const handleDelete = async (id) => {
     try {
-      const { congresoName, congresoDescription, congresoDate } = formData;
-      console.log(formData);
-      if (!congresoName || !congresoDescription || !congresoDate) {
-        alert('Por favor, completa todos los campos.');
-        return;
-      }
-      const response = await axios.post(
-        'http://localhost:8000/api/congreso',
-        {
-          congress_title: congresoName,
-          congress_description: congresoDescription,
-          congress_date: congresoDate,
-        },
-        {
-          headers: {
-            'Authorization': 'Bearer ' + authToken,
-          }
-        }
-      );
-      loadCongresos();
-      console.log('Congreso creado exitosamente:', response.data);
+      await deleteCongress(id, authToken);
+      const updatedCongresses = await fetchCongresses(authToken);
+      setCongresos(updatedCongresses.data);
     } catch (error) {
-      console.error('Error al crear el congreso:', error.response || error.message);
+      console.error('Error al eliminar el congreso:', error);
+      alert('Hubo un error al eliminar el congreso');
     }
   };
   
-
   return (
     <div className="p-3">
       <div className="container">
         <div className="row row-cols-1 row-cols-md-2 g-4">
           <div className="col">
-            <div className="card p-3 h-100 itemProfile">
+            <div className="card p-3 h-100 itemProfile ">
               <h3>Datos del usuario</h3>
-              <label htmlFor="">UserName</label>
+              <label className='form-control text-start' htmlFor="">Usuario: {datos.user_app}</label>
+              <label className='form-control text-start' htmlFor="">Nombre: {datos.user_name}</label>
+              <label className='form-control text-start' htmlFor="">Correo eléctronico: {datos.user_email}</label>
+              <label className='form-control text-start' htmlFor="">Número de telefono: {datos.user_phone}</label>
             </div>
           </div>
           <div className="col">
             <div className="card p-3 h-100 itemProfile">
-              <h3>Asistencias pasadas</h3>
+              <h3>Historial de asistencias</h3>
             </div>
           </div>
           <div className="col">
@@ -93,37 +60,21 @@ export default function Profile() {
             <div className="card p-3 h-100 itemProfile">
               <h3>Mis congresos</h3>
               <div className="row gy-3">
-                <div className="col-12 col-md-6 d-grid gap-2">
-                  <button className="btn btn-dark" type="button" data-bs-toggle="modal" data-bs-target="#exampleModal">
-                    <i className="bi bi-plus-square"></i> Crear congreso
-                  </button>
-                </div>
-                <div className="col-12 col-md-6 d-flex flex-column flex-md-row gap-2">
-                  <input
-                    className="form-control me-2"
-                    type="search"
-                    placeholder="Congreso"
-                    aria-label="Search"
-                  />
-                  <button className="btn btn-outline-success" type="button">
-                    Buscar
-                  </button>
-                </div>
                 <div>
                   <table className='table'>
                     <thead>
                       <tr>
-                        <th scope='col'>#</th>
                         <th scope='col'>Congreso</th>
                         <th scope='col'>Fecha</th>
+                        <th scope='col'>Modify</th>
                       </tr>
                     </thead>
                     <tbody>
                       {congresos.map((congreso) => (
                         <tr key={congreso.id}>
-                          <th scope='row'>{congreso.id}</th>
                           <td>{congreso.congress_title}</td>
                           <td>{congreso.congress_date}</td>
+                          <td><button onClick={() => handleDelete(congreso.id)} className="btn btn-danger"><i className="bi bi-trash"></i></button></td>
                         </tr>
                       ))}
                     </tbody>
@@ -132,48 +83,6 @@ export default function Profile() {
               </div>
             </div>
           </div>
-        </div>
-      </div>
-
-
-      <div className="modal fade modal-dialog-scrollable" id="exampleModal" tabIndex="-1" aria-labelledby="exampleModalLabel" aria-hidden="true">
-        <div className="modal-dialog">
-          <form action="" onSubmit={(e) => {
-          e.preventDefault();
-          postCongreso();
-        }}>
-
-          <div className="modal-content">
-            <div className="modal-header">
-              <h1 className="modal-title fs-5" id="exampleModalLabel">Crear congreso</h1>
-              <button type="button" className="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
-            </div>
-            <div className="modal-body container-flex">
-              <div className='p-2'>
-                <label htmlFor="">Nombre del congreso</label>
-              </div>
-              <div className='p-2'>
-                <input id='congresoName' value={formData.congresoName} onChange={handleInputChange} className='form-control text-center' placeholder="Ingrese un nombre para el congreso" type="text" />
-              </div>
-              <div className='p-2'>
-                <label htmlFor="">Descripcion</label>
-              </div>
-              <div className='p-2'>
-                <textarea name="" id='congresoDescription' value={formData.congresoDescription} onChange={handleInputChange} className='form-control text-center' placeholder="Ingrese una descripcion sobre el congreso"></textarea>
-              </div>
-              <div>
-                <label htmlFor="">Fecha</label>
-              </div>
-              <div className='col-auto text-center'>
-                <input id='congresoDate' value={formData.congresoDate} onChange={handleInputChange} type="date" className='form-control text-center' />
-              </div>
-            </div>
-            <div className="modal-footer">
-              <button type="button" className="btn btn-secondary" data-bs-dismiss="modal">Cancelar</button>
-              <button type="submit" className="btn btn-success">Guardar <i className="bi bi-floppy"></i></button>
-            </div>
-          </div>
-          </form>
         </div>
       </div>
     </div>

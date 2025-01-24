@@ -5,10 +5,10 @@ import './styles/Perfil.css'
 import { BrowserRouter as Router, Routes, Route, useLocation, Navigate } from 'react-router-dom';
 import Login from './pages/Login';
 import Topics from './pages/Topics';
-import PublicPage from './pages/PublicPage';
+import Congress from './pages/Congress';
 import Profile from './pages/Profile';
 import Navigatebar from './components/Navigatebar'
-import { AuthProvider, AuthContext } from './AuthContext';
+import { AuthProvider, AuthContext } from './context/AuthContext';
 import React, {useContext } from 'react'
 
 const PrivateRoute = ({children})=>{
@@ -20,7 +20,7 @@ const PrivateRoute = ({children})=>{
 function App() {
   const location = useLocation();
   // Define rutas donde no quieres mostrar el navbar
-  const excludedRoutes = ['/', '/public'];
+  const excludedRoutes = ['/'];
  
   return (
       <div className="App">
@@ -29,7 +29,7 @@ function App() {
         <Routes>
           {/*Publicas*/}
           <Route path="/" element={<Login />} />
-          <Route path="/public" element={<PublicPage />} />
+          <Route path="/congress" element={<Congress />} />
           {/*Privadas*/}
           <Route path="/topics" element={<PrivateRoute> <Topics /> </PrivateRoute>} />
           <Route path="/profile" element={<PrivateRoute> <Profile /> </PrivateRoute>} />

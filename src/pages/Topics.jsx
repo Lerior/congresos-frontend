@@ -1,8 +1,10 @@
-import React, { useEffect, useState } from 'react'
+import React, { useContext, useEffect, useState } from 'react'
 import axios from 'axios';
+import { AuthContext } from '../context/AuthContext';
 
 export default function Topics() {
   const [topics, setTopics] = useState([]);
+   const { authToken } = useContext(AuthContext);
   const token = localStorage.getItem("authToken");
 
   useEffect(() => {
@@ -11,7 +13,7 @@ export default function Topics() {
         const response = await axios.get('http://localhost:8000/api/topic', {
           //mandar token en authorization
           headers: {
-            'Authorization': 'Bearer ' + token
+            'Authorization': 'Bearer ' + authToken
           }
         });
 
@@ -22,7 +24,7 @@ export default function Topics() {
       }
     };
     loadTopics();
-  }, [token]);
+  }, [authToken]);
 
   
   //recordar usar algo para cambiar a '/public'

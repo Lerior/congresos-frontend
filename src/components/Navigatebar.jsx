@@ -21,13 +21,13 @@ export default function Navigate() {
         <div className="collapse navbar-collapse" id="navbarText">
           <ul className="navbar-nav me-auto mb-2 mb-lg-0">
             <li className="nav-item">
-              <Link className="nav-link" aria-current="page" to="/topics">Mis Temas</Link>
+              <Link className="nav-link" aria-current="page" to="/topics">Temas</Link>
             </li>
             <li className="nav-item">
               <Link className="nav-link" to="/profile">Perfil</Link>
             </li>
             <li className="nav-item">
-              <Link className="nav-link" to="/public">Congresos</Link>
+              <Link className="nav-link" to="/congress">Congresos</Link>
             </li>
           </ul>
           <span className="navbar-text">
