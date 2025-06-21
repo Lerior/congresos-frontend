@@ -37,9 +37,9 @@ export const deleteUser = (id, authToken) => {
 };
 
 
-export const fetchCongresses = (authToken) => {
+export const fetchCongresses = (authToken, page = 1) => {
     setAuthorizationHeader(authToken);
-    return api.get('/congreso');
+    return api.get(`/congreso?page=${page}`);
 };
 
 export const fetchCongressById = (id, authToken) => {

@@ -12,6 +12,11 @@ export default function Congress() {
     usuarioApp: currentUser,
   });
 
+  const [pagination, setPagination] = useState({
+    current_page: 1,
+    last_page: 1,
+  });
+
   const handleInputChange = (e) => {
     setFormData({
       ...formData,
@@ -20,10 +25,22 @@ export default function Congress() {
   };
 
 
+  useEffect(() => {
+    fetchCongresses(authToken, pagination.current_page)
+      .then((response) => {
+        console.log("Respuesta de la API:", response); 
+        setCongresos(response.data.data); // Datos de la página actual
+        setPagination({
+          current_page: response.data.current_page,
+          last_page: response.data.last_page,
+        });
+      })
+      .catch((error) => console.error(error));
+  }, [authToken, pagination.current_page]); // Dependencia de la página actual
+
   const handleSubmit = async (e) => {
     e.preventDefault();
     const { congresoName, congresoDescription, congresoDate } = formData;
-    console.log(formData);
     if (!congresoName || !congresoDescription || !congresoDate) {
       alert('Por favor, completa todos los campos.');
       return;
@@ -45,26 +62,26 @@ export default function Congress() {
         usuarioApp: currentUser,
       });
 
-      const updatedCongresses = await fetchCongresses(authToken);
-      setCongresos(updatedCongresses.data);
+      // Recargar los congresos después de crear uno nuevo
+      const updatedCongresses = await fetchCongresses(authToken, pagination.current_page);
+      setCongresos(updatedCongresses.data.data);
+      setPagination({
+        current_page: updatedCongresses.data.current_page,
+        last_page: updatedCongresses.data.last_page,
+      });
     } catch (error) {
       console.error('Error al crear el congreso:', error.response || error.message);
     }
   };
 
-  useEffect(() => {
-    fetchCongresses(authToken)
-      .then((response) => {
-        setCongresos(response.data);
-      })
-      .catch((error) => console.error(error));
-  }, [authToken]);
-
-
   function getCongreso(id) {
     console.log("id del congreso " + id)
   }
 
+
+  const handlePageChange = (page) => {
+    setPagination((prev) => ({ ...prev, current_page: page }));
+  };
   return (
     <div>
       <div className="col-12 col-md-auto d-flex flex-column flex-md-row gap-2 p-2 align-items-center justify-content-center">
@@ -116,7 +133,27 @@ export default function Congress() {
             </div>
           ))}
         </div>
+      <div className="d-flex justify-content-center mt-4">
+            <button
+                className="btn btn-dark me-2"
+                onClick={() => handlePageChange(pagination.current_page - 1)}
+                disabled={pagination.current_page === 1}
+            >
+                Anterior
+            </button>
+            <span className="align-self-center mx-3">
+                Página {pagination.current_page} de {pagination.last_page}
+            </span>
+            <button
+                className="btn btn-dark ms-2"
+                onClick={() => handlePageChange(pagination.current_page + 1)}
+                disabled={pagination.current_page === pagination.last_page}
+            >
+                Siguiente
+            </button>
+        </div>
       </div>
+
 
       <div className="modal fade modal-dialog-scrollable" id="exampleModal" tabIndex="-1" aria-labelledby="exampleModalLabel" aria-hidden="false">
         <div className="modal-dialog">
